@@ -1,0 +1,66 @@
+﻿1. View all NSGs in subscription or resource group:
+
+Get-AzureRmNetworkSecurityGroup
+
+
+
+2. View the rules of an NSG named NSG-FrontEnd:
+
+Get-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name NSG-FrontEnd | Select SecurityRules -ExpandProperty SecurityRules
+
+View default security rules:
+Get-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name "NSG-FrontEnd" | Select DefaultSecurityRules -ExpandProperty DefaultSecurityRules
+
+
+
+3. Add new rule:
+
+$nsg = Get-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name NSG-FrontEnd
+
+Add-AzureRmNetworkSecurityRuleConfig -NetworkSecurityGroup $nsg `
+-Name https-rule `
+-Description "Allow HTTPS" `
+-Access Allow `
+-Protocol Tcp `
+-Direction Inbound `
+-Priority 102 `
+-SourceAddressPrefix * `
+-SourcePortRange * `
+-DestinationAddressPrefix * `
+-DestinationPortRange 443
+
+Set-AzureRmNetworkSecurityGroup -NetworkSecurityGroup $nsg
+
+
+
+4. Change a rule:
+
+$nsg = Get-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name NSG-FrontEnd
+
+Set-AzureRmNetworkSecurityRuleConfig -NetworkSecurityGroup $nsg `
+-Name https-rule `
+-Description "Allow HTTPS" `
+-Access Allow `
+-Protocol Tcp `
+-Direction Inbound `
+-Priority 102 `
+-SourceAddressPrefix Internet `
+-SourcePortRange * `
+-DestinationAddressPrefix * `
+-DestinationPortRange 443
+
+Set-AzureRmNetworkSecurityGroup -NetworkSecurityGroup $nsg
+
+
+
+5. Delete a rule:
+
+$nsg = Get-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name NSG-FrontEnd
+Remove-AzureRmNetworkSecurityRuleConfig -NetworkSecurityGroup $nsg -Name https-rule
+Set-AzureRmNetworkSecurityGroup -NetworkSecurityGroup $nsg
+
+
+
+6. Delete NSG (it must be diassociated from all resources first):
+
+Remove-AzureRmNetworkSecurityGroup -ResourceGroupName RG-NSG -Name NSG-FrontEnd -Force

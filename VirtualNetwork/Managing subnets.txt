@@ -1,0 +1,20 @@
+﻿1. Create:
+
+New-AzureRmVirtualNetworkSubnetConfig
+Add-AzureRmVirtualNetworkSubnetConfig
+
+
+2. Set-AzureRmVirtualNetworkSubnetConfig can be used to:
+
+- Set NSG
+- Set UDR
+- Change address space (all resource must be removed from subnet, smallest range is /29 which gives 8 - 5 (Azure reserverd) = 3 addresses).
+
+
+3. Remove:
+
+Remove-AzureRmVirtualNetworkSubnetConfig (all resources must be removed from subnet)
+
+
+Don't forget to run:
+Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
