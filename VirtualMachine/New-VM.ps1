@@ -18,7 +18,8 @@
 $VerbosePreference = "Continue"
 $ErrorActionPreference = "Stop"
 
-
+#$securePassword = ConvertTo-SecureString "Password" -AsPlainText -Force
+#$cred = New-Object System.Management.Automation.PSCredential ("username", $securePassword);
 $cred = Get-Credential
 
 $rg = Get-AzureRmResourceGroup -Name $ResourceGroupName
@@ -34,7 +35,7 @@ $nicName = $VMName + 'NIC'
 $nic = New-AzureRmNetworkInterface -Name $nicName -ResourceGroupName $rg.ResourceGroupName -Location $Location `
     -SubnetId $subnetConfig.Id -PublicIpAddressId $pip.Id
 
-$vm = New-AzureRmVMConfig -VMName $VMName -VMSize Standard_D1
+$vm = New-AzureRmVMConfig -VMName $VMName -VMSize Standard_A1_v2
 
 $vm = Set-AzureRmVMOperatingSystem `
     -VM $vm `

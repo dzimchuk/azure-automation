@@ -23,11 +23,6 @@ $VerbosePreference = "Continue"
 $ErrorActionPreference = "Stop"
 
 
-#$securePassword = ConvertTo-SecureString "Password" -AsPlainText -Force
-#$cred = New-Object System.Management.Automation.PSCredential ("username", $securePassword);
-$cred = Get-Credential
-
-
 # Get the existing storage account  
 $storageAccount = Get-AzureRmStorageAccount -ResourceGroupName $StorageAccountResourceGroupName `
                                         -Name $StorageAccountName
@@ -51,20 +46,25 @@ $nicName = $VMName + 'NIC'
 $nic = New-AzureRmNetworkInterface -Name $nicName -ResourceGroupName $rg.ResourceGroupName -Location $Location `
     -SubnetId $subnetConfig.Id -PublicIpAddressId $pip.Id
 
+
+$securePassword = ConvertTo-SecureString ' ' -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ("azureuser", $securePassword)
+
+
 $vm = New-AzureRmVMConfig -VMName $VMName -VMSize Standard_A1_v2
 
 $vm = Set-AzureRmVMOperatingSystem `
     -VM $vm `
-    -Windows `
+    -Linux `
     -ComputerName $VMName `
     -Credential $cred `
-    -ProvisionVMAgent -EnableAutoUpdate
+    -DisablePasswordAuthentication
 
 $vm = Set-AzureRmVMSourceImage `
     -VM $vm `
-    -PublisherName MicrosoftWindowsServer `
-    -Offer WindowsServer `
-    -Skus 2016-Datacenter `
+    -PublisherName Canonical `
+    -Offer UbuntuServer `
+    -Skus 16.04-LTS `
     -Version latest
 
 $vm = Set-AzureRmVMOSDisk `
@@ -76,5 +76,9 @@ $vm = Set-AzureRmVMOSDisk `
     -VhdUri $osDiskUri
 
 $vm = Add-AzureRmVMNetworkInterface -VM $vm -Id $nic.Id
+
+# Configure SSH Keys
+$sshPublicKey = Get-Content "$env:USERPROFILE\.ssh\id_rsa.pub"
+Add-AzureRmVMSshPublicKey -VM $vm -KeyData $sshPublicKey -Path "/home/azureuser/.ssh/authorized_keys"
 
 New-AzureRmVM -ResourceGroupName $rg.ResourceGroupName -Location $Location -VM $vm
