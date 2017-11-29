@@ -9,7 +9,9 @@
   [Parameter(Mandatory = $true)]  
   [string]$storageAccountResourceGroupName,
   [Parameter(Mandatory = $true)]  
-  [string]$storageAccountName
+  [string]$storageAccountName,
+  [Parameter(Mandatory = $true)]  
+  [string]$osDiskName
 )
 
 # Set the output level to verbose and make the script stop on error
@@ -21,7 +23,7 @@ $storageAccount = Get-AzureRmStorageAccount -ResourceGroupName $storageAccountRe
                                         -Name $storageAccountName
 
 $blobEndpoint = $storageAccount.PrimaryEndpoints.Blob.ToString()
-$osDiskName = $vmName + 'OsDisk'
+#$osDiskName = $vmName + 'OsDisk'
 $osDiskUri = $blobEndpoint + "vhds/" + $osDiskName  + ".vhd"
 
 # Get the existing VM
