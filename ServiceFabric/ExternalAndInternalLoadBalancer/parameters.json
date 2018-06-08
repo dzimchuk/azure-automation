@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "<your cluster name>"
+        },
+        "clusterLocation": {
+            "value": "westeurope"
+        },
+        "computeLocation": {
+            "value": "westeurope"
+        },
+        "adminUserName": {
+            "value": "admin"
+        },
+        "adminPassword": {
+            "value": "<admin password>"
+        },
+        "nicName": {
+            "value": "<your cluster name>-NIC"
+        },
+        "existingVNetRGName": {
+            "value": "TestInternalCluster"
+        },
+        "existingVNetName": {
+            "value": "uc_vnet"
+        },
+        "subnet0Name": {
+            "value": "BackEnd"
+        },
+        "subnet0Prefix": {
+            "value": "192.168.2.0/24"
+        },
+        "lbPrivateIPAddress": {
+            "value": "192.168.2.4"
+        },
+        "lbPublicIPName": {
+            "value": "<your cluster name>-LBIP"
+        },
+        "lbPublicDnsName": {
+            "value": "<your cluster name>"
+        },
+        "applicationDiagnosticsStorageAccountName": {
+            "value": "<your cluster name>sfdg"
+        },
+        "supportLogStorageAccountName": {
+            "value": "<your cluster name>sflogs"
+        },
+        "sourceVaultValue": {
+            "value": "/subscriptions/{subscriptionId}/resourceGroups/{vault resource group name}/providers/Microsoft.KeyVault/vaults/{vault name}"
+        },
+        "certificateUrlValue": {
+            "value": "https://{vault name}.vault.azure.net/secrets/{cert name}/{secret id}"
+        },
+        "certificateThumbprint": {
+            "value": "{cert thumbprint}"
+        },
+        "vmImageSku": {
+            "value": "2016-Datacenter-with-Containers"
+        },
+        "vmImageOffer": {
+            "value": "WindowsServer"
+        },
+        "nt0ephemeralStartPort": {
+            "value": 49152
+        },
+        "nt0ephemeralEndPort": {
+            "value": 65534
+        },
+        "nt0applicationStartPort": {
+            "value": 20000
+        },
+        "nt0applicationEndPort": {
+            "value": 30000
+        },
+        "nt0fabricTcpGatewayPort": {
+            "value": 19000
+        },
+        "nt0fabricHttpGatewayPort": {
+            "value": 19080
+        },
+        "nt0reverseProxyEndpointPort": {
+            "value": 19081
+        },
+        "clientCertificateThumbprints": {
+            "value": [
+                {
+                    "certificateThumbprint": "{client cert thumbprint}",
+                    "isAdmin": true
+                }
+            ]
+        }
+    }
+}
